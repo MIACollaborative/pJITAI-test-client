@@ -27,6 +27,7 @@
 from dataclasses import dataclass
 from typing import Any
 from .util import time_8601
+import json
 
 
 @dataclass(frozen=True)
@@ -116,33 +117,44 @@ class UpdateResponse(_StatusBase):
 class DecisionResponse(_CoreDefaultBase, _StatusBase):
     """Response object for calls to the decision API route.
     """
+    id: int = None
+    user_id: int = None
+    proj_uuid: str = None
+    state_data: json = None
     decision: int = None
-    decision_id: str = None
-    decision_options: list = None
-
+    status_code: str = None
+    pi: float = None
+    random_number: float = None
+    
     def as_dict(self):
         result = {
-            "timestamp": self.timestamp,
+            "id": self.id,
             "user_id": self.user_id,
+            "proj_uuid": self.proj_uuid,
+            "state_data": self.state_data,
+            "timestamp": self.timestamp,
+            "decision": self.decision,
             "status_code": self.status_code,
             "status_message": self.status_message,
-            "decision": self.decision,
-            "decision_id": self.decision_id,
-            "decision_options": self.decision_options,
+            "pi": self.pi,
+            "random_number": self.random_number,
         }
 
-        return
+        return result
 
     @classmethod
     def from_dict(cls, input_dict):
         d = DecisionResponse(
-            timestamp=input_dict["timestamp"],
+            id=input_dict['id'],
             user_id=input_dict["user_id"],
-            decision_id=input_dict["decision_id"],
-            decision=input_dict['decision'],
-            decision_options=input_dict["decision_options"],
+            proj_uuid=input_dict["proj_uuid"],
+            state_data=input_dict["state_data"],
+            timestamp=input_dict["timestamp"],
+            decision=input_dict["decision"],
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
+            pi=input_dict["pi"],
+            random_number=input_dict["random_number"],
         )
 
         return d
@@ -156,6 +168,7 @@ class DataVector(_CoreDefaultBase, _StatusBase):
     proximal_outcome: int = 0
     proximal_outcome_timestamp: str = ""
     values: list[DataPoint] = None
+    user_id: str = ""
 
     def as_dict(self):
         return {

@@ -63,6 +63,7 @@ class Client:
                               json={})
             r.raise_for_status()
             self.model = r.json()  # Save the pJITAI model returned from the server
+            # print('self.model: ', self.model)
 
         except HTTPError as exc:
             code = exc.response.status_code
@@ -80,7 +81,8 @@ class Client:
         """
         return self.model
 
-    def upload(self, data: DataVector, eligibility: dict) -> UploadResponse:
+    # def upload(self, data: DataVector, eligibility: dict) -> UploadResponse:
+    def upload(self, data: DataVector) -> UploadResponse:
         """Upload data for storage in the pJITAI server.
 
         Args:
@@ -137,7 +139,8 @@ class Client:
 
             raise Exception(f'{code} {r.json()}')
 
-    def decision(self, covariates: DataVector, eligibility: dict) -> DecisionResponse:
+    # def decision(self, covariates: DataVector, eligibility: dict) -> DecisionResponse:
+    def decision(self, input_data) -> DecisionResponse:
         """Initiate this algorithm's decision operation on the server.
 
         Args:
@@ -152,7 +155,7 @@ class Client:
         try:
             r = requests.post(self.service_url + '/decision',
                               headers={'pJITAI_token': self.service_token},
-                              json=covariates.as_dict())
+                              json=input_data)
             r.raise_for_status()
             result = DecisionResponse.from_dict(r.json())
             return result
