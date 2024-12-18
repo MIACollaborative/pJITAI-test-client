@@ -82,11 +82,11 @@ class Client:
         return self.model
 
     # def upload(self, data: DataVector, eligibility: dict) -> UploadResponse:
-    def upload(self, data: DataVector) -> UploadResponse:
-        """Upload data for storage in the pJITAI server.
+    def upload(self, upload_data: dict) -> UploadResponse:
+        """Upload upload_data for storage in the pJITAI server.
 
         Args:
-            data (DataVector): A DataVector containing all the necessary information for a single uploaded point.  This is currently limited to a single entry per upload.
+            upload_data (dict): A dict containing all the necessary information for a single uploaded point.  This is currently limited to a single entry per upload.
 
         Raises:
             Exception: General purpose exception with a description of any error.
@@ -97,7 +97,7 @@ class Client:
         try:
             r = requests.post(self.service_url + '/upload',
                               headers={'pJITAI_token': self.service_token},
-                              json=data.as_dict())
+                              json=upload_data)
             r.raise_for_status()  # Raise an exception if the request fails for any reason
 
             result = UploadResponse.from_dict(r.json())
