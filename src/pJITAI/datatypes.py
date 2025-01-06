@@ -102,18 +102,24 @@ class UploadResponse(_StatusBase):
 class UpdateResponse(_StatusBase):
     """Response object for calls to the update API route.
     """
+    status_code: str = None
+    status_message: str = None
+    update_result: dict = None
+
     def as_dict(self):
         result = {
             "status_code": self.status_code,
-            "status_message": self.status_message
+            "status_message": self.status_message,
+            "update_result": self.update_result,
         }
-        return
+        return result
 
     @classmethod
     def from_dict(cls, input_dict):
         d = UpdateResponse(
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
+            update_result=input_dict["update_result"]
         )
 
         return d
