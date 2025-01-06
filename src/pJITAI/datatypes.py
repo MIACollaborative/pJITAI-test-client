@@ -75,18 +75,24 @@ class DataPoint:
 class UploadResponse(_StatusBase):
     """Response object for calls to the upload API route.
     """
+    status_code: str = None
+    status_message: str = None
+    data: dict = None
+    
     def as_dict(self):
         result = {
             "status_code": self.status_code,
-            "status_message": self.status_message
+            "status_message": self.status_message,
+            "data": self.data,
         }
-        return
+        return result
 
     @classmethod
     def from_dict(cls, input_dict):
         d = UploadResponse(
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
+            data=input_dict["data"]
         )
 
         return d

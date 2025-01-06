@@ -60,9 +60,9 @@ def upload(row: dict):
 
 
 # UPDATE
-def update():
+def update(row: dict):
     try:
-        update_result = session.update()
+        update_result = session.update(row)
         print(update_result)
     except Exception as e:
         print(f'Update Exception: {e}')
@@ -122,10 +122,10 @@ def process_upload():
     # f.close()
     hs1_upload = {
         "user_id": 1,
-        "timestamp": "2024-12-18 16:09:50.851152",
+        "timestamp": str(datetime.now()),
         "proximal_outcome": 0.5,
         "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",
-        "decision_id": 1,
+        "decision_id": 37,  # this will be used to connect with Decision table 
     }
 
     allevents.append(('upload', hs1_upload))
@@ -154,7 +154,13 @@ def process_update():
 
     # f.close()
     # Fake data to test upload
-    pass
+    user_id = 1
+
+    row = {}
+    row['user_id'] = user_id
+
+    allevents.append(('update', row))
+    return
 
 
 def process_decision():
@@ -207,21 +213,17 @@ if __name__ == '__main__':
 
     session = pJITAI.Client(server, service_id, service_token)
 
-    process_upload()
-    # process_update()
     process_decision()
-    # allevents.sort(key=lambda x: x[0])
+    process_upload()
+    process_update()
     print(f'All events = {len(allevents)}')
 
     # simulation
-    count = 0
     for event in allevents:
         if event[0] == 'upload':
             upload(event[1])
-        # elif event[1] == 'update':
-        #     count += 1
-        #     update()
-        # else:
         elif event[0] == 'decision':
             decision(event[1])
+        else:
+            update(event[1])
         

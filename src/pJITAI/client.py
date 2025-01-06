@@ -111,7 +111,7 @@ class Client:
 
             raise Exception(f'{code} {r.json()}')
 
-    def update(self) -> UpdateResponse:
+    def update(self, update_data) -> UpdateResponse:
         """Initiate this algorithm's update operation on the server.
         
         This is an asynchronous operation and will return once it launches.
@@ -126,7 +126,7 @@ class Client:
         try:
             r = requests.post(self.service_url + '/update',
                               headers={'pJITAI_token': self.service_token},
-                              json={})
+                              json=update_data)
             r.raise_for_status()
             result = UpdateResponse.from_dict(r.json())
             return result
