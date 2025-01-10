@@ -125,7 +125,7 @@ def process_upload():
         "timestamp": str(datetime.now()),
         "proximal_outcome": 0.5,
         "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",
-        "decision_id": 37,  # this will be used to connect with Decision table 
+        "decision_id": 39,  # this will be used to connect with Decision table 
     }
 
     allevents.append(('upload', hs1_upload))
