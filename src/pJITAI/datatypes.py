@@ -77,13 +77,13 @@ class UploadResponse(_StatusBase):
     """
     status_code: str = None
     status_message: str = None
-    data: dict = None
+    upload_result: dict = None
     
     def as_dict(self):
         result = {
             "status_code": self.status_code,
             "status_message": self.status_message,
-            "data": self.data,
+            "upload_result": self.upload_result,
         }
         return result
 
@@ -92,7 +92,7 @@ class UploadResponse(_StatusBase):
         d = UploadResponse(
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
-            data=input_dict["data"]
+            upload_result=input_dict["upload_result"]
         )
 
         return d
@@ -126,30 +126,18 @@ class UpdateResponse(_StatusBase):
 
 
 @dataclass(frozen=True)
-class DecisionResponse(_CoreDefaultBase, _StatusBase):
+class DecisionResponse(_StatusBase):
     """Response object for calls to the decision API route.
     """
-    id: int = None
-    user_id: int = None
-    proj_uuid: str = None
-    state_data: json = None
-    decision: int = None
     status_code: str = None
-    pi: float = None
-    random_number: float = None
+    status_message: str = None
+    decision_result: dict = None
     
     def as_dict(self):
         result = {
-            "id": self.id,
-            "user_id": self.user_id,
-            "proj_uuid": self.proj_uuid,
-            "state_data": self.state_data,
-            "timestamp": self.timestamp,
-            "decision": self.decision,
             "status_code": self.status_code,
             "status_message": self.status_message,
-            "pi": self.pi,
-            "random_number": self.random_number,
+            "decision_result": self.decision_result,
         }
 
         return result
@@ -157,16 +145,9 @@ class DecisionResponse(_CoreDefaultBase, _StatusBase):
     @classmethod
     def from_dict(cls, input_dict):
         d = DecisionResponse(
-            id=input_dict['id'],
-            user_id=input_dict["user_id"],
-            proj_uuid=input_dict["proj_uuid"],
-            state_data=input_dict["state_data"],
-            timestamp=input_dict["timestamp"],
-            decision=input_dict["decision"],
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
-            pi=input_dict["pi"],
-            random_number=input_dict["random_number"],
+            decision_result=input_dict["decision_result"],
         )
 
         return d

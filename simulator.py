@@ -75,7 +75,7 @@ def decision(row: dict):
     try:
         # decision_result = session.decision(row, session.model['configuration']['eligibility']) # TODO: Eligibility need to be retrieved and/or modified by the user.
         decision_result = session.decision(row) # TODO: Eligibility need to be retrieved and/or modified by the user.
-        decision_responses[decision_result.user_id] = decision_result.id
+        decision_responses[decision_result.decision_result['user_id']] = decision_result.decision_result['id']
         print(decision_result)
     except Exception as e:
         print(f'Decision Exception: {e}')
@@ -214,8 +214,8 @@ if __name__ == '__main__':
     session = pJITAI.Client(server, service_id, service_token)
 
     process_decision()
-    process_upload()
-    process_update()
+    # process_upload()
+    # process_update()
     print(f'All events = {len(allevents)}')
 
     # simulation
