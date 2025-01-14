@@ -63,6 +63,7 @@ class Client:
                               json={})
             r.raise_for_status()
             self.model = r.json()  # Save the pJITAI model returned from the server
+            # print('self.model: ', self.model)
 
         except HTTPError as exc:
             code = exc.response.status_code
@@ -80,11 +81,12 @@ class Client:
         """
         return self.model
 
-    def upload(self, data: DataVector, eligibility: dict) -> UploadResponse:
-        """Upload data for storage in the pJITAI server.
+    # def upload(self, data: DataVector, eligibility: dict) -> UploadResponse:
+    def upload(self, upload_data: dict) -> UploadResponse:
+        """Upload upload_data for storage in the pJITAI server.
 
         Args:
-            data (DataVector): A DataVector containing all the necessary information for a single uploaded point.  This is currently limited to a single entry per upload.
+            upload_data (dict): A dict containing all the necessary information for a single uploaded point.  This is currently limited to a single entry per upload.
 
         Raises:
             Exception: General purpose exception with a description of any error.
@@ -95,7 +97,7 @@ class Client:
         try:
             r = requests.post(self.service_url + '/upload',
                               headers={'pJITAI_token': self.service_token},
-                              json=data.as_dict())
+                              json=upload_data)
             r.raise_for_status()  # Raise an exception if the request fails for any reason
 
             result = UploadResponse.from_dict(r.json())
@@ -109,7 +111,7 @@ class Client:
 
             raise Exception(f'{code} {r.json()}')
 
-    def update(self) -> UpdateResponse:
+    def update(self, update_data) -> UpdateResponse:
         """Initiate this algorithm's update operation on the server.
         
         This is an asynchronous operation and will return once it launches.
@@ -124,7 +126,7 @@ class Client:
         try:
             r = requests.post(self.service_url + '/update',
                               headers={'pJITAI_token': self.service_token},
-                              json={})
+                              json=update_data)
             r.raise_for_status()
             result = UpdateResponse.from_dict(r.json())
             return result
@@ -137,7 +139,8 @@ class Client:
 
             raise Exception(f'{code} {r.json()}')
 
-    def decision(self, covariates: DataVector, eligibility: dict) -> DecisionResponse:
+    # def decision(self, covariates: DataVector, eligibility: dict) -> DecisionResponse:
+    def decision(self, input_data) -> DecisionResponse:
         """Initiate this algorithm's decision operation on the server.
 
         Args:
@@ -152,7 +155,7 @@ class Client:
         try:
             r = requests.post(self.service_url + '/decision',
                               headers={'pJITAI_token': self.service_token},
-                              json=covariates.as_dict())
+                              json=input_data)
             r.raise_for_status()
             result = DecisionResponse.from_dict(r.json())
             return result

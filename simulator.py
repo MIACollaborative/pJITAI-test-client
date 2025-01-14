@@ -31,7 +31,7 @@ from datetime import datetime
 from pJITAI.datatypes import DataVector
 
 parser = argparse.ArgumentParser(description='Generate RL test data')
-parser.add_argument('--server', default='http://localhost:85/api')
+parser.add_argument('--server', default='http://localhost:5005/api')
 parser.add_argument('--service_id', help='UUID')
 
 # TODO: Remove the default once implemented on the server
@@ -42,13 +42,16 @@ args = parser.parse_args()
 decision_responses = {}
 
 # UPLOAD
-def upload(row: DataVector):
+def upload(row: dict):
     try:
-        temp = row.as_dict()
-        temp['decision_id'] = decision_responses[row.user_id]
-        temp['status_message'] = row.status_message
-        temp['status_code'] = row.status_code
-        upload_result = session.upload(DataVector.from_dict(temp), session.model['configuration']['eligibility']) # TODO: Eligibility need to be retrieved and/or modified by the user.
+        # temp = row.as_dict()
+        # # print('row: ', row)
+        # # temp['decision_id'] = decision_responses[row.user_id]
+        # temp['decision_id'] = 1
+        # temp['status_message'] = row.status_message
+        # temp['status_code'] = row.status_code
+        # # upload_result = session.upload(DataVector.from_dict(temp), session.model['configuration']['eligibility']) # TODO: Eligibility need to be retrieved and/or modified by the user.
+        upload_result = session.upload(row) # TODO: Eligibility need to be retrieved and/or modified by the user.
         print(upload_result)
     except Exception as e:
         print(f'Upload Exception: {e}')
@@ -57,9 +60,9 @@ def upload(row: DataVector):
 
 
 # UPDATE
-def update():
+def update(row: dict):
     try:
-        update_result = session.update()
+        update_result = session.update(row)
         print(update_result)
     except Exception as e:
         print(f'Update Exception: {e}')
@@ -70,8 +73,9 @@ def update():
 # DECISION
 def decision(row: dict):
     try:
-        decision_result = session.decision(row, session.model['configuration']['eligibility']) # TODO: Eligibility need to be retrieved and/or modified by the user.
-        decision_responses[decision_result.user_id] = decision_result.decision_id
+        # decision_result = session.decision(row, session.model['configuration']['eligibility']) # TODO: Eligibility need to be retrieved and/or modified by the user.
+        decision_result = session.decision(row) # TODO: Eligibility need to be retrieved and/or modified by the user.
+        decision_responses[decision_result.decision_result['user_id']] = decision_result.decision_result['id']
         print(decision_result)
     except Exception as e:
         print(f'Decision Exception: {e}')
@@ -83,89 +87,122 @@ allevents = []
 
 
 def process_upload():
-    f = open('upload.csv')
-    i = 0
-    columns = None
-    for l in f:
-        if i == 0:
-            columns = l.strip().split(',')
-        else:
-            data = l.strip().split(',')
-            row = {}
-            row[columns[0]] = data[0]  # user id
-            row[columns[1]] = data[1]  # timestamp
-            timestamp = datetime.fromisoformat(data[1])
-            row[columns[2]] = data[2]  # decision_timestamp
-            row[columns[3]] = int(data[3])  # decision
-            row[columns[4]] = data[4]  # proximal_outcome_timestamp
-            row[columns[5]] = int(data[5])  # proximal_outcome
-            values = []
-            for idx in range(6, len(data)):
-                val = {}
-                val['name'] = columns[idx]
-                val['value'] = float(data[idx])  # TODO FIXME - hack to make the demo work
-                values.append(val)
-            row['values'] = values
-            row['decision_id'] = ""
-            row.pop('decision')
-            row.pop('decision_timestamp')
-            rowdp = pJITAI.DataVector.from_dict(row)
-            event = (timestamp, 'upload', rowdp)
-            allevents.append(event)
+    # f = open('upload.csv')
+    # i = 0
+    # columns = None
+    # for l in f:
+    #     if i == 0:
+    #         columns = l.strip().split(',')
+    #     else:
+    #         data = l.strip().split(',')
+    #         row = {}
+    #         row[columns[0]] = data[0]  # user id
+    #         row[columns[1]] = data[1]  # timestamp
+    #         timestamp = datetime.fromisoformat(data[1])
+    #         row[columns[2]] = data[2]  # decision_timestamp
+    #         row[columns[3]] = int(data[3])  # decision
+    #         row[columns[4]] = data[4]  # proximal_outcome_timestamp
+    #         row[columns[5]] = int(data[5])  # proximal_outcome
+    #         values = []
+    #         for idx in range(6, len(data)):
+    #             val = {}
+    #             val['name'] = columns[idx]
+    #             val['value'] = float(data[idx])  # TODO FIXME - hack to make the demo work
+    #             values.append(val)
+    #         row['values'] = values
+    #         row['decision_id'] = ""
+    #         row.pop('decision')
+    #         row.pop('decision_timestamp')
+    #         rowdp = pJITAI.DataVector.from_dict(row)
+    #         print(rowdp)
+    #         event = (timestamp, 'upload', rowdp)
+    #         allevents.append(event)
 
-        i += 1
-    f.close()
+    #     i += 1
+    # f.close()
+    hs1_upload = {
+        "user_id": 1,
+        "timestamp": str(datetime.now()),
+        "proximal_outcome": 0.5,
+        "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",
+        "decision_id": 39,  # this will be used to connect with Decision table 
+    }
+
+    allevents.append(('upload', hs1_upload))
+    return
 
 
 def process_update():
-    f = open('update.csv')
-    i = 0
-    columns = None
-    for l in f:
-        if i == 0:
-            columns = l.strip().split(',')
-            # print(columns)
-        else:
-            data = l.strip().split(',')
-            # print(data)
-            row = {}
-            row[columns[0]] = data[0]  # user id
-            timestamp = datetime.fromisoformat(data[0])
+    # f = open('update.csv')
+    # i = 0
+    # columns = None
+    # for l in f:
+    #     if i == 0:
+    #         columns = l.strip().split(',')
+    #         # print(columns)
+    #     else:
+    #         data = l.strip().split(',')
+    #         # print(data)
+    #         row = {}
+    #         row[columns[0]] = data[0]  # user id
+    #         timestamp = datetime.fromisoformat(data[0])
 
-            event = (timestamp, 'update', row)
-            allevents.append(event)
+    #         event = (timestamp, 'update', row)
+    #         allevents.append(event)
 
-        i += 1
+    #     i += 1
 
-    f.close()
+    # f.close()
+    # Fake data to test upload
+    user_id = 1
+
+    row = {}
+    row['user_id'] = user_id
+
+    allevents.append(('update', row))
+    return
 
 
 def process_decision():
-    f = open('decision.csv')
-    i = 0
-    columns = None
-    for l in f:
-        if i == 0:
-            columns = l.strip().split(',')
-        else:
-            data = l.strip().split(',')
-            row = {}
-            row[columns[0]] = data[0]  # user id
-            row[columns[1]] = data[1]  # timestamp
-            timestamp = datetime.fromisoformat(data[1])
-            values = []
-            for idx in range(2, len(data)):
-                val = {}
-                val['name'] = columns[idx]
-                val['value'] = float(data[idx])
-                values.append(val)
-            row['values'] = values
-            rowdp = pJITAI.DecisionVector.from_dict(row)
-            event = (timestamp, 'decision', rowdp)
-            allevents.append(event)
+    # f = open('decision.csv')
+    # i = 0
+    # columns = None
+    # for l in f:
+    #     if i == 0:
+    #         columns = l.strip().split(',')
+    #     else:
+    #         data = l.strip().split(',')
+    #         row = {}
+    #         row[columns[0]] = data[0]  # user id
+    #         row[columns[1]] = data[1]  # timestamp
+    #         timestamp = datetime.fromisoformat(data[1])
+    #         values = []
+    #         for idx in range(2, len(data)):
+    #             val = {}
+    #             val['name'] = columns[idx]
+    #             val['value'] = float(data[idx])
+    #             values.append(val)
+    #         row['values'] = values
+    #         rowdp = pJITAI.DecisionVector.from_dict(row)
+    #         event = (timestamp, 'decision', rowdp)
+    #         allevents.append(event)
 
-        i += 1
-    f.close()
+    #     i += 1
+    # f.close()
+
+    hs1_state_data = { # state data, must match covariates? # Jane: Yes  # YS: These data should be attached from client session
+        'Location_validation_status_code': ['SUCCESS'],
+        'Location': 1, 
+    }
+    user_id = 1
+    timestamp = str(datetime.now())
+
+    row = {}
+    row['user_id'] = user_id
+    row['timestamp'] = timestamp
+    row['state_data'] = hs1_state_data
+
+    allevents.append(('decision', row))
 
 
 if __name__ == '__main__':
@@ -176,24 +213,17 @@ if __name__ == '__main__':
 
     session = pJITAI.Client(server, service_id, service_token)
 
-    process_upload()
-    process_update()
     process_decision()
-    allevents.sort(key=lambda x: x[0])
+    # process_upload()
+    # process_update()
     print(f'All events = {len(allevents)}')
 
     # simulation
-    count = 0
     for event in allevents:
-        if event[1] == 'upload':
-            data = event[2]
-            upload(data)
-        elif event[1] == 'update':
-            count += 1
-            update()
+        if event[0] == 'upload':
+            upload(event[1])
+        elif event[0] == 'decision':
+            decision(event[1])
         else:
-            decision(event[2])
-            pass
-            
-
-        if count == 1: break
+            update(event[1])
+        

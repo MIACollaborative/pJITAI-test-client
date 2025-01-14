@@ -27,6 +27,7 @@
 from dataclasses import dataclass
 from typing import Any
 from .util import time_8601
+import json
 
 
 @dataclass(frozen=True)
@@ -74,18 +75,24 @@ class DataPoint:
 class UploadResponse(_StatusBase):
     """Response object for calls to the upload API route.
     """
+    status_code: str = None
+    status_message: str = None
+    upload_result: dict = None
+    
     def as_dict(self):
         result = {
             "status_code": self.status_code,
-            "status_message": self.status_message
+            "status_message": self.status_message,
+            "upload_result": self.upload_result,
         }
-        return
+        return result
 
     @classmethod
     def from_dict(cls, input_dict):
         d = UploadResponse(
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
+            upload_result=input_dict["upload_result"]
         )
 
         return d
@@ -95,54 +102,52 @@ class UploadResponse(_StatusBase):
 class UpdateResponse(_StatusBase):
     """Response object for calls to the update API route.
     """
+    status_code: str = None
+    status_message: str = None
+    update_result: dict = None
+
     def as_dict(self):
         result = {
             "status_code": self.status_code,
-            "status_message": self.status_message
+            "status_message": self.status_message,
+            "update_result": self.update_result,
         }
-        return
+        return result
 
     @classmethod
     def from_dict(cls, input_dict):
         d = UpdateResponse(
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
+            update_result=input_dict["update_result"]
         )
 
         return d
 
 
 @dataclass(frozen=True)
-class DecisionResponse(_CoreDefaultBase, _StatusBase):
+class DecisionResponse(_StatusBase):
     """Response object for calls to the decision API route.
     """
-    decision: int = None
-    decision_id: str = None
-    decision_options: list = None
-
+    status_code: str = None
+    status_message: str = None
+    decision_result: dict = None
+    
     def as_dict(self):
         result = {
-            "timestamp": self.timestamp,
-            "user_id": self.user_id,
             "status_code": self.status_code,
             "status_message": self.status_message,
-            "decision": self.decision,
-            "decision_id": self.decision_id,
-            "decision_options": self.decision_options,
+            "decision_result": self.decision_result,
         }
 
-        return
+        return result
 
     @classmethod
     def from_dict(cls, input_dict):
         d = DecisionResponse(
-            timestamp=input_dict["timestamp"],
-            user_id=input_dict["user_id"],
-            decision_id=input_dict["decision_id"],
-            decision=input_dict['decision'],
-            decision_options=input_dict["decision_options"],
             status_code=input_dict["status_code"],
             status_message=input_dict["status_message"],
+            decision_result=input_dict["decision_result"],
         )
 
         return d
@@ -156,6 +161,7 @@ class DataVector(_CoreDefaultBase, _StatusBase):
     proximal_outcome: int = 0
     proximal_outcome_timestamp: str = ""
     values: list[DataPoint] = None
+    user_id: str = ""
 
     def as_dict(self):
         return {
