@@ -59,7 +59,7 @@ class Client:
         self.service_token = service_token
         try:
             r = requests.post(self.service_url, headers={
-                              'pJITAI_token': self.service_token},
+                              'TOKEN': self.service_token},
                               json={})
             r.raise_for_status()
             self.model = r.json()  # Save the pJITAI model returned from the server
@@ -96,7 +96,7 @@ class Client:
         """
         try:
             r = requests.post(self.service_url + '/upload',
-                              headers={'pJITAI_token': self.service_token},
+                              headers={'TOKEN': self.service_token},
                               json=upload_data)
             r.raise_for_status()  # Raise an exception if the request fails for any reason
 
@@ -125,7 +125,7 @@ class Client:
         """
         try:
             r = requests.post(self.service_url + '/update',
-                              headers={'pJITAI_token': self.service_token},
+                              headers={'TOKEN': self.service_token},
                               json=update_data)
             r.raise_for_status()
             result = UpdateResponse.from_dict(r.json())
@@ -154,7 +154,7 @@ class Client:
         """
         try:
             r = requests.post(self.service_url + '/decision',
-                              headers={'pJITAI_token': self.service_token},
+                              headers={'TOKEN': self.service_token},
                               json=input_data)
             r.raise_for_status()
             result = DecisionResponse.from_dict(r.json())

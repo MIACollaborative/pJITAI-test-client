@@ -125,7 +125,7 @@ def process_upload():
         "timestamp": str(datetime.now()),
         "proximal_outcome": 0.5,
         "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",
-        "decision_id": 39,  # this will be used to connect with Decision table 
+        "decision_id": 1,  # this will be used to connect with Decision table 
     }
 
     allevents.append(('upload', hs1_upload))
@@ -213,9 +213,9 @@ if __name__ == '__main__':
 
     session = pJITAI.Client(server, service_id, service_token)
 
-    process_decision()
+    # process_decision()
     # process_upload()
-    # process_update()
+    process_update()
     print(f'All events = {len(allevents)}')
 
     # simulation
