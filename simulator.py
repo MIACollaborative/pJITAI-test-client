@@ -214,7 +214,7 @@ if __name__ == '__main__':
     session = pJITAI.Client(server, service_id, service_token)
 
     # process_decision()
-    process_upload()
+    # process_upload()
     process_update()
     print(f'All events = {len(allevents)}')
 
