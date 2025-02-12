@@ -27,6 +27,7 @@ import argparse
 import traceback
 import pJITAI
 from datetime import datetime
+import json
 
 from pJITAI.datatypes import DataVector
 
@@ -82,9 +83,63 @@ def decision(row: dict):
         traceback.print_exc()
         pass
 
+def list_call(list_of_calls):
+    try:
+        for idx, c in enumerate(list_of_calls):
+            type = c['type']
+            content = c['content']
+            if type == 'decision':
+                result = session.decision(content)
+            elif type == 'upload':
+                result = session.upload(content)
+            elif type == 'update':
+                result = session.update(content)
+            print(result)
+    except Exception as e:
+        print(f'Exception: {e}')
+        traceback.print_exc()
+        pass
+
 
 allevents = []
 
+def read_json_process_call():
+    with open('data.json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    list_call(data)
+    # print(data)
+    # print(type(data))
+    return
+
+def process_list_call():
+    # Define JSON list of calls
+    list_of_calls = [
+        {'type': 'decision',
+         'content': {
+             'user_id': 1,
+             'timestamp': str(datetime.now()),
+             'state_data': {
+                'Location_validation_status_code': ['SUCCESS'],
+                'Location': 1, 
+            }
+         }},
+        {'type': 'upload',
+         'content': {
+             "user_id": 1,
+             "timestamp": str(datetime.now()),
+             "proximal_outcome": 0.5,
+             "proximal_outcome_timestamp": "2024-10-23T16:57:39Z",
+             "decision_id": 3,
+         }},
+        {'type': 'update',
+         'content': {
+             'user_id': 1,
+         }}
+    ]
+
+    # Call list_call()
+    list_call(list_of_calls)
+    return
 
 def process_upload():
     # f = open('upload.csv')
@@ -213,17 +268,20 @@ if __name__ == '__main__':
 
     session = pJITAI.Client(server, service_id, service_token)
 
+    read_json_process_call()
+    # process_list_call()
+
     # process_decision()
     # process_upload()
-    process_update()
-    print(f'All events = {len(allevents)}')
+    # process_update()
+    # print(f'All events = {len(allevents)}')
 
     # simulation
-    for event in allevents:
-        if event[0] == 'upload':
-            upload(event[1])
-        elif event[0] == 'decision':
-            decision(event[1])
-        else:
-            update(event[1])
+    # for event in allevents:
+    #     if event[0] == 'upload':
+    #         upload(event[1])
+    #     elif event[0] == 'decision':
+    #         decision(event[1])
+    #     else:
+    #         update(event[1])
         
