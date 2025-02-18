@@ -1,0 +1,43 @@
+{
+  "created_date": "2/18/2025, 10:59:34 AM",
+  "number_of_days": "70",
+  "missing_upload_ratio": "0.1",
+  "simulation_data": [
+    {
+      "type": "decision",
+      "content": {
+        "user_id": 1,
+        "timestamp": "3/25/2025, 10:59:34 AM",
+        "state_data": {
+          "Location_validation_status_code": [
+            "SUCCESS"
+          ],
+          "Location": 1
+        }
+      }
+    },
+    {
+      "type": "upload",
+      "content": {
+        "user_id": 1,
+        "timestamp": "3/25/2025, 10:59:34 AM",
+        "proximal_outcome": 2.612443116710622,
+        "proximal_outcome_timestamp": "3/25/2025, 10:59:34 AM",
+        "decision_id": 52
+      }
+    },
+    {
+      "type": "decision",
+      "content": {
+        "user_id": 1,
+        "timestamp": "4/29/2025, 10:59:34 AM",
+        "state_data": {
+          "Location_validation_status_code": [
+            "SUCCESS"
+          ],
+          "Location": 1
+        }
+      }
+    }
+  ]
+}

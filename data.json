@@ -3,30 +3,7 @@
     "type": "decision",
     "content": {
       "user_id": 1,
-      "timestamp": "2/12/2025, 7:10:32 PM",
-      "state_data": {
-        "Location_validation_status_code": [
-          "SUCCESS"
-        ],
-        "Location": 1
-      }
-    }
-  },
-  {
-    "type": "upload",
-    "content": {
-      "user_id": 1,
-      "timestamp": "2/12/2025, 9:10:32 PM",
-      "proximal_outcome": 1.2266248560237452,
-      "proximal_outcome_timestamp": "2/12/2025, 8:10:32 PM",
-      "decision_id": 4
-    }
-  },
-  {
-    "type": "decision",
-    "content": {
-      "user_id": 1,
-      "timestamp": "2/12/2025, 11:10:32 PM",
+      "timestamp": "3/19/2025, 6:38:15 PM",
       "state_data": {
         "Location_validation_status_code": [
           "SUCCESS"
@@ -39,10 +16,10 @@
     "type": "upload",
     "content": {
       "user_id": 1,
-      "timestamp": "2/13/2025, 1:10:32 AM",
-      "proximal_outcome": 3.354129002664933,
-      "proximal_outcome_timestamp": "2/13/2025, 12:10:32 AM",
-      "decision_id": 5
+      "timestamp": "3/19/2025, 6:38:15 PM",
+      "proximal_outcome": 0.3476960622089318,
+      "proximal_outcome_timestamp": "3/19/2025, 6:38:15 PM",
+      "decision_id": 50
     }
   },
   {
@@ -55,53 +32,7 @@
     "type": "decision",
     "content": {
       "user_id": 1,
-      "timestamp": "2/13/2025, 3:10:32 AM",
-      "state_data": {
-        "Location_validation_status_code": [
-          "SUCCESS"
-        ],
-        "Location": 1
-      }
-    }
-  },
-  {
-    "type": "upload",
-    "content": {
-      "user_id": 1,
-      "timestamp": "2/13/2025, 5:10:32 AM",
-      "proximal_outcome": -0.6458318267918906,
-      "proximal_outcome_timestamp": "2/13/2025, 4:10:32 AM",
-      "decision_id": 6
-    }
-  },
-  {
-    "type": "decision",
-    "content": {
-      "user_id": 1,
-      "timestamp": "2/13/2025, 7:10:32 AM",
-      "state_data": {
-        "Location_validation_status_code": [
-          "SUCCESS"
-        ],
-        "Location": 1
-      }
-    }
-  },
-  {
-    "type": "upload",
-    "content": {
-      "user_id": 1,
-      "timestamp": "2/13/2025, 9:10:32 AM",
-      "proximal_outcome": 6.829334935669365,
-      "proximal_outcome_timestamp": "2/13/2025, 8:10:32 AM",
-      "decision_id": 7
-    }
-  },
-  {
-    "type": "decision",
-    "content": {
-      "user_id": 1,
-      "timestamp": "2/13/2025, 11:10:32 AM",
+      "timestamp": "4/18/2025, 6:38:15 PM",
       "state_data": {
         "Location_validation_status_code": [
           "SUCCESS"

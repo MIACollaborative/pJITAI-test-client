@@ -38,6 +38,7 @@ parser.add_argument('--service_id', help='UUID')
 # TODO: Remove the default once implemented on the server
 parser.add_argument('--service_token', help='UUID',
                     default='e6e74d36-a3e4-4631-b077-4fdd703636f2')
+parser.add_argument('--file_name', help='file_name for simulation')
 args = parser.parse_args()
 
 decision_responses = {}
@@ -103,10 +104,11 @@ def list_call(list_of_calls):
 
 allevents = []
 
-def read_json_process_call():
-    with open('data.json', 'r', encoding='utf-8') as f:
+def read_json_process_call(file_name):
+    with open(file_name, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    list_call(data)
+        simulation = data["simulation_data"]
+    list_call(simulation)
     # print(data)
     # print(type(data))
     return
@@ -265,10 +267,11 @@ if __name__ == '__main__':
     server = args.server
     service_id = args.service_id
     service_token = args.service_token
+    file_name = args.file_name
 
     session = pJITAI.Client(server, service_id, service_token)
 
-    read_json_process_call()
+    read_json_process_call(file_name)
     # process_list_call()
 
     # process_decision()
